@@ -1,7 +1,9 @@
-import { Module } from '@nestjs/common';
-import { CacheModule } from '@nestjs/cache-manager';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common'
+import { CacheModule } from '@nestjs/cache-manager'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { RedisPubSubService } from './redis-pubsub.service'
+import { RedisSubscriberService } from './redis-subscriber.service'
 
 @Module({
   imports: [
@@ -11,6 +13,6 @@ import { AppService } from './app.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RedisPubSubService, RedisSubscriberService],
 })
 export class AppModule {}

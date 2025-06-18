@@ -1,3 +1,5 @@
+# NestJS API with Redis Pub/Sub Cache
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -23,15 +25,36 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+NestJS application with Redis Pub/Sub and caching capabilities using Docker.
 
-## Project setup
+## Features
+
+- ✅ Redis Pub/Sub messaging
+- ✅ Redis caching with NestJS cache manager
+- ✅ Docker Compose setup
+- ✅ Redis Commander web UI
+- ✅ Event-driven architecture
+- ✅ Pattern-based subscriptions
+
+## Quick Start
+
+### 1. Install Dependencies
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+### 2. Start Redis with Docker
+
+```bash
+# Start Redis and Redis Commander
+$ docker-compose up -d
+
+# Check if containers are running
+$ docker-compose ps
+```
+
+### 3. Run the Application
 
 ```bash
 # development
@@ -44,7 +67,99 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+## Redis Services
+
+### Redis Server
+- **Port**: 6379
+- **Features**: Pub/Sub, Caching, Persistence
+- **Configuration**: Keyspace notifications enabled
+
+### Redis Commander (Web UI)
+- **URL**: http://localhost:8081
+- **Features**: Web-based Redis management interface
+
+## API Endpoints
+
+### Cache Operations
+- `GET /` - Get cached hello message (triggers cache events)
+
+### Pub/Sub Operations
+- `POST /publish` - Publish message to channel
+  ```json
+  {
+    "channel": "general",
+    "message": "Hello World!"
+  }
+  ```
+
+- `GET /subscriptions` - Get active subscriptions
+- `GET /subscribers/:channel` - Get subscriber count for channel
+
+## Redis Pub/Sub Events
+
+The application automatically publishes events for cache operations:
+
+- `cache:hit` - When cached value is found
+- `cache:miss` - When cache miss occurs and new value is stored
+
+### Example Usage
+
+1. **Start the application**:
+   ```bash
+   npm run start:dev
+   ```
+
+2. **Access the root endpoint** (triggers cache events):
+   ```bash
+   curl http://localhost:3000/
+   ```
+
+3. **Publish a message**:
+   ```bash
+   curl -X POST http://localhost:3000/publish \
+     -H "Content-Type: application/json" \
+     -d '{"channel": "general", "message": "Hello from API!"}'
+   ```
+
+4. **Check subscriptions**:
+   ```bash
+   curl http://localhost:3000/subscriptions
+   ```
+
+## Docker Commands
+
+```bash
+# Start services
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs redis
+docker-compose logs redis-commander
+
+# Restart services
+docker-compose restart
+
+# Remove containers and volumes
+docker-compose down -v
+```
+
+## Project Structure
+
+```
+src/
+├── app.controller.ts          # API endpoints
+├── app.service.ts             # Business logic with cache and pub/sub
+├── app.module.ts              # Module configuration
+├── redis-pubsub.service.ts    # Redis Pub/Sub service
+└── redis-subscriber.service.ts # Event subscriber service
+```
+
+## Development
+
+### Run tests
 
 ```bash
 # unit tests
@@ -57,31 +172,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
 ## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+- [NestJS Documentation](https://docs.nestjs.com)
+- [Redis Pub/Sub](https://redis.io/docs/manual/pubsub/)
+- [ioredis](https://github.com/luin/ioredis)
+- [NestJS Cache Manager](https://docs.nestjs.com/techniques/caching)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## License
+
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ## Support
 
@@ -92,7 +192,3 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 - Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
 - Website - [https://nestjs.com](https://nestjs.com/)
 - Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
