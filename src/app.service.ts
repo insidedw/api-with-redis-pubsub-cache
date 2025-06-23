@@ -25,4 +25,10 @@ export class AppService {
     await this.cacheManager.set('hello', value)
     return value
   }
+
+  async deleteHello(): Promise<string> {
+    const redis = getRedis()
+    await redis.del('hello')
+    return 'Hello World!'
+  }
 }

@@ -9,4 +9,9 @@ export class AppController {
   async getHello(): Promise<string> {
     return await this.appService.getHello()
   }
+
+  @Get('delete')
+  async deleteHello(): Promise<string> {
+    return await this.appService.deleteHello()
+  }
 }
