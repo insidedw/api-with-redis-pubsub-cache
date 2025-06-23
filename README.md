@@ -2,17 +2,6 @@
 [1부 Redis Pub/Sub을 이용한 Distributed Cache 도입기](https://channel.io/ko/blog/articles/Redis-PubSub%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-Distributed-Cache-%EB%8F%84%EC%9E%85%EA%B8%B0-1%EB%B6%80-27ad4f55) 글을 보고 직접 구현해보았습니다.
 
 
-프로젝트를 살펴보고 Redis Pub/Sub을 이용한 로컬 캐시 최신화 프로토타입에 대해 설명드리겠습니다.
-
-Read file: package.json
-Read file: src/pubsub.service.ts
-Read file: src/redis/index.ts
-Read file: src/app.controller.ts
-Read file: src/app.service.ts
-Read file: src/app.module.ts
-Read file: docker-compose.yml
-이제 프로젝트를 분석했으니, Redis Pub/Sub을 이용한 로컬 캐시 최신화 프로토타입에 대해 한글로 설명드리겠습니다.
-
 ## Redis Pub/Sub을 이용한 로컬 캐시 최신화 프로토타입
 
 이 프로젝트는 **NestJS**와 **Redis Pub/Sub**을 활용하여 여러 서버 인스턴스 간의 로컬 캐시를 실시간으로 동기화하는 시스템을 구현한 프로토타입입니다.
