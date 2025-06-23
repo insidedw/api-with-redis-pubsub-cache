@@ -1,34 +1,38 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Cache } from 'cache-manager'
-import { getRedis } from './redis'
+import { PubSubService } from './pubsub.service'
 
 @Injectable()
 export class AppService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private pubSubService: PubSubService,
+  ) {}
 
   async getHello(): Promise<string> {
     const cachedValue = await this.cacheManager.get<string>('hello')
-
-    const redis = getRedis()
-    await redis.set('hello', 'Hello World!')
-    const value2 = await redis.get('hello')
-    console.log('value2', value2)
 
     if (cachedValue) {
       console.log('cachedValue', cachedValue)
       return cachedValue
     }
+    await this.cacheManager.set('hello', 'Hello World!')
     console.log('cachedValue not found')
 
-    const value = 'Hello World!'
-    await this.cacheManager.set('hello', value)
-    return value
+    return 'NOT FOUND'
   }
 
   async deleteHello(): Promise<string> {
-    const redis = getRedis()
-    await redis.del('hello')
-    return 'Hello World!'
+    // Publish event when hello is deleted
+    await this.pubSubService.publish(
+      'user-events',
+      JSON.stringify({
+        type: 'hello_deleted',
+        timestamp: new Date().toISOString(),
+      }),
+    )
+
+    return 'Deleted from cache!'
   }
 }

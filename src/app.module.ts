@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { CacheModule } from '@nestjs/cache-manager'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
+import { PubSubService } from './pubsub.service'
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { AppService } from './app.service'
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PubSubService],
 })
 export class AppModule {}
