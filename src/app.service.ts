@@ -28,7 +28,7 @@ export class AppService {
     await this.pubSubService.publish(
       'user-events',
       JSON.stringify({
-        type: 'hello_deleted',
+        type: 'hello',
         timestamp: new Date().toISOString(),
       }),
     )
