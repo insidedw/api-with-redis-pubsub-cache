@@ -21,7 +21,6 @@
 - **Subscriber**: 메시지를 구독하는 Redis 클라이언트
 - **일반 Redis**: 일반적인 Redis 작업용 클라이언트
 - **자동 재연결**: 연결 단절 시 자동으로 재연결 시도
-- **타임아웃 설정**: 연결 및 명령 타임아웃 설정
 
 #### 2. **Pub/Sub 서비스** (`src/pubsub.service.ts`)
 ```typescript
@@ -76,6 +75,15 @@ this.subscriber.on('message', (channel, message) => {
   await this.clearCacheByKey(parsedMessage.type)
 })
 ```
+
+### 4. 장애 대응 > 자동 복구 
+연결 상태 감지: 내부적으로 setInterval를 이용해서 Redis Pub/Sub 연결 및 구독 상태를 지속적으로 확인합니다.
+
+자동 재연결 및 재구독: 연결 단절이나 비정상적인 구독 종료가 감지되면, 즉시 자동으로 재연결 및 재구독을 시도하여 구독 상태를 복원합니다.
+
+방어적 캐시 클리어: 재구독 성공 시, 연결이 끊어져 있던 동안 놓쳤을 수 있는 무효화 메시지로 인한 잠재적 불일치를 해소하기 위해 해당 인스턴스의 로컬 캐시 전체를 즉시 비웁니다 (cacheManager.clear()). 이를 통해 다음 데이터 접근 시 반드시 최신 상태를 반영하도록 강제합니다.
+
+
 
 ### �� 핵심 장점
 
