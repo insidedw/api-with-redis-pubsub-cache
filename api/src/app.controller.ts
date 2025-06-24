@@ -14,4 +14,12 @@ export class AppController {
   async deleteHello(): Promise<string> {
     return await this.appService.deleteHello()
   }
+
+  @Get('status')
+  getCacheStatus(): {
+    isConnected: boolean
+    subscribedChannels: string[]
+  } {
+    return this.appService.getCacheStatus()
+  }
 }

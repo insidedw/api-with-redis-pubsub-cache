@@ -35,4 +35,12 @@ export class AppService {
 
     return 'Deleted from cache!'
   }
+
+  getCacheStatus(): {
+    isConnected: boolean
+    subscribedChannels: string[]
+  } {
+    // 캐시 상태 확인
+    return this.pubSubService.getCacheStatus()
+  }
 }

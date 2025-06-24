@@ -20,6 +20,8 @@
 - **Publisher**: 메시지를 발행하는 Redis 클라이언트
 - **Subscriber**: 메시지를 구독하는 Redis 클라이언트
 - **일반 Redis**: 일반적인 Redis 작업용 클라이언트
+- **자동 재연결**: 연결 단절 시 자동으로 재연결 시도
+- **타임아웃 설정**: 연결 및 명령 타임아웃 설정
 
 #### 2. **Pub/Sub 서비스** (`src/pubsub.service.ts`)
 ```typescript
